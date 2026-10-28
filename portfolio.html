@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="theme-color" content="#f4f4f1">
+	<meta name="description" content="Selected film, design, photography, and music work by Stephen Jablonsky.">
+	<title>Portfolio | Stephen Jablonsky</title>
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="styles.css">
+	<script src="app.js" defer></script>
+</head>
+<body>
+	<div class="shell">
+		<header class="topbar">
+			<a class="wordmark" href="index.html">SJ / Portfolio</a>
+			<nav aria-label="Main navigation">
+				<a href="about.html">About</a>
+				<a href="portfolio.html" aria-current="page">Portfolio</a>
+				<a href="exhibitions.html">Exhibitions</a>
+				<a href="contact.html">Contact</a>
+			</nav>
+			<a class="availability" href="mailto:hello@stephenjablonsky.com">Available for select work</a>
+		</header>
+		<main id="top">
+			<header class="page-intro reveal">
+				<p class="eyebrow">Film / Design / Photography / Music</p>
+				<h1>Portfolio</h1>
+			</header>
+			<section class="work" id="work" aria-labelledby="work-title">
+				<div class="work-heading">
+					<h2 id="work-title">Selected work / 01&ndash;08</h2>
+					<div class="filters" role="group" aria-label="Filter projects by category">
+						<button class="filter" type="button" data-filter="All" aria-pressed="true">All</button>
+						<button class="filter" type="button" data-filter="Film" aria-pressed="false">Film</button>
+						<button class="filter" type="button" data-filter="Design" aria-pressed="false">Design</button>
+						<button class="filter" type="button" data-filter="Photography" aria-pressed="false">Photography</button>
+						<button class="filter" type="button" data-filter="Music" aria-pressed="false">Music</button>
+					</div>
+				</div>
+				<div class="grid" aria-live="polite">
+					<article class="project" data-category="Film">
+						<div class="image-wrap"><img src="https://images.unsplash.com/photo-1485846234645-a62644f84728?auto=format&amp;fit=crop&amp;w=900&amp;h=900&amp;q=85" alt="Rows of empty cinema seats" loading="lazy"></div>
+						<div class="project-meta"><h3>After the Image</h3><span class="project-type">Film</span></div>
+						<span class="project-index">01 / Short film</span>
+					</article>
+					<article class="project" data-category="Design">
+						<div class="image-wrap"><img src="https://images.unsplash.com/photo-1511818966892-d7d671e672a2?auto=format&amp;fit=crop&amp;w=900&amp;h=900&amp;q=85" alt="Sculptural modern architecture in monochrome" loading="lazy"></div>
+						<div class="project-meta"><h3>Objects in Space</h3><span class="project-type">Design</span></div>
+						<span class="project-index">02 / Identity</span>
+					</article>
+					<article class="project" data-category="Photography">
+						<div class="image-wrap"><img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&amp;fit=crop&amp;w=900&amp;h=900&amp;q=85" alt="Black and white portrait of a man" loading="lazy"></div>
+						<div class="project-meta"><h3>Quiet Hours</h3><span class="project-type">Photography</span></div>
+						<span class="project-index">03 / Portraits</span>
+					</article>
+					<article class="project" data-category="Music">
+						<div class="image-wrap"><img src="https://images.unsplash.com/photo-1516280440614-37939bbacd81?auto=format&amp;fit=crop&amp;w=900&amp;h=900&amp;q=85" alt="Singer performing under a spotlight" loading="lazy"></div>
+						<div class="project-meta"><h3>Live / At the Edge</h3><span class="project-type">Music</span></div>
+						<span class="project-index">04 / Live session</span>
+					</article>
+					<article class="project" data-category="Film">
+						<div class="image-wrap"><img src="https://images.unsplash.com/photo-1478720568477-152d9b164e26?auto=format&amp;fit=crop&amp;w=900&amp;h=900&amp;q=85" alt="Film camera and production set" loading="lazy"></div>
+						<div class="project-meta"><h3>Northbound</h3><span class="project-type">Film</span></div>
+						<span class="project-index">05 / Direction</span>
+					</article>
+					<article class="project" data-category="Design">
+						<div class="image-wrap"><img src="https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&amp;fit=crop&amp;w=900&amp;h=900&amp;q=85" alt="Minimal fashion editorial portrait" loading="lazy"></div>
+						<div class="project-meta"><h3>Form / Function</h3><span class="project-type">Design</span></div>
+						<span class="project-index">06 / Art direction</span>
+					</article>
+					<article class="project" data-category="Photography">
+						<div class="image-wrap"><img src="https://images.unsplash.com/photo-1519608487953-e999c86e7455?auto=format&amp;fit=crop&amp;w=900&amp;h=900&amp;q=85" alt="Night sky above a quiet landscape" loading="lazy"></div>
+						<div class="project-meta"><h3>Somewhere, After</h3><span class="project-type">Photography</span></div>
+						<span class="project-index">07 / Landscapes</span>
+					</article>
+					<article class="project" data-category="Music">
+						<div class="image-wrap"><img src="https://images.unsplash.com/photo-1511379938547-c1f69419868d?auto=format&amp;fit=crop&amp;w=900&amp;h=900&amp;q=85" alt="Recording studio mixing desk" loading="lazy"></div>
+						<div class="project-meta"><h3>Room Tone</h3><span class="project-type">Music</span></div>
+						<span class="project-index">08 / Sound</span>
+					</article>
+				</div>
+			</section>
+		</main>
+		<footer class="closing">
+			<div class="footer-row">
+				<span>Stephen Jablonsky &copy; 2026</span>
+				<a href="contact.html">Start a conversation</a>
+				<span>Independent practice / Brooklyn, NY</span>
+			</div>
+		</footer>
+	</div>
+</body>
+</html>
