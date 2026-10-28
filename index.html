@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="theme-color" content="#f4f4f1">
+	<meta name="description" content="Selected film, design, photography, and music work by Stephen Jablonsky.">
+	<title>Stephen Jablonsky — Selected Work</title>
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+	<style>
+		:root {
+			color-scheme: light;
+			--paper: #f4f4f1;
+			--ink: #171717;
+			--muted: #777772;
+			--line: #c9c9c4;
+			--gutter: clamp(20px, 5vw, 76px);
+			--mono: "DM Mono", monospace;
+			--sans: "Space Grotesk", sans-serif;
+		}
+
+		* { box-sizing: border-box; }
+		html { scroll-behavior: smooth; }
+		body {
+			margin: 0;
+			background: var(--paper);
+			color: var(--ink);
+			font-family: var(--sans);
+			-webkit-font-smoothing: antialiased;
+		}
+		a { color: inherit; text-decoration: none; }
+		button { color: inherit; font: inherit; }
+		.shell { width: min(100%, 1680px); margin: 0 auto; }
+		.topbar {
+			min-height: 76px;
+			padding: 0 var(--gutter);
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			border-bottom: 1px solid var(--line);
+			font: 11px var(--mono);
+			letter-spacing: 0;
+			text-transform: uppercase;
+		}
+		.wordmark { font-weight: 500; }
+		.topbar nav { display: flex; gap: clamp(18px, 3vw, 42px); }
+		.topbar nav a, .availability { transition: opacity 180ms ease; }
+		.topbar nav a:hover, .availability:hover { opacity: .55; }
+		.availability { display: flex; align-items: center; gap: 9px; }
+		.availability::before {
+			content: "";
+			width: 7px;
+			height: 7px;
+			border-radius: 50%;
+			background: var(--ink);
+		}
+
+		.intro {
+			min-height: 510px;
+			padding: 68px var(--gutter) 76px;
+			display: grid;
+			grid-template-columns: minmax(0, 1fr) minmax(230px, 31%);
+			align-items: end;
+			gap: 7vw;
+		}
+		.eyebrow, .section-kicker, .project-index, .project-type, .footer-label {
+			font: 10px var(--mono);
+			letter-spacing: 0;
+			text-transform: uppercase;
+		}
+		.eyebrow { margin: 0 0 26px; }
+		h1 {
+			max-width: 930px;
+			margin: 0;
+			font-size: clamp(64px, 11.6vw, 170px);
+			font-weight: 500;
+			line-height: .78;
+			letter-spacing: 0;
+		}
+		h1 span { display: block; }
+		.intro-note {
+			margin: 35px 0 0;
+			max-width: 430px;
+			font-size: clamp(15px, 1.5vw, 19px);
+			line-height: 1.45;
+		}
+		.intro-aside { padding-bottom: 2px; }
+		.intro-aside p {
+			max-width: 260px;
+			margin: 17px 0 0;
+			color: #555550;
+			font-size: 13px;
+			line-height: 1.6;
+		}
+		.intro-aside .coordinates { margin-top: 37px; color: var(--muted); font: 10px var(--mono); }
+
+		.work { padding: 0 var(--gutter) 105px; }
+		.work-heading {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			gap: 20px;
+			padding: 18px 0;
+			border-top: 1px solid var(--ink);
+			border-bottom: 1px solid var(--line);
+		}
+		.work-heading h2 { margin: 0; font: 10px var(--mono); text-transform: uppercase; }
+		.filters { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 5px; }
+		.filter {
+			padding: 8px 11px;
+			border: 1px solid transparent;
+			border-radius: 0;
+			background: transparent;
+			cursor: pointer;
+			font: 10px var(--mono);
+			text-transform: uppercase;
+			transition: background 160ms ease, color 160ms ease, border-color 160ms ease;
+		}
+		.filter:hover { border-color: var(--line); }
+		.filter[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+		.grid {
+			display: grid;
+			grid-template-columns: repeat(4, minmax(0, 1fr));
+			gap: 42px 18px;
+			padding-top: 22px;
+		}
+		.project { min-width: 0; animation: appear 500ms both; }
+		.project[hidden] { display: none; }
+		.project:nth-child(2) { animation-delay: 50ms; }
+		.project:nth-child(3) { animation-delay: 100ms; }
+		.project:nth-child(4) { animation-delay: 150ms; }
+		.image-wrap { overflow: hidden; background: #d7d7d2; aspect-ratio: 1; }
+		.image-wrap img {
+			display: block;
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+			filter: grayscale(1);
+			transition: transform 650ms cubic-bezier(.2,.7,.2,1), filter 350ms ease;
+		}
+		.project:hover img { transform: scale(1.035); filter: grayscale(.25); }
+		.project-meta { display: flex; justify-content: space-between; gap: 12px; margin-top: 13px; }
+		.project h3 { margin: 0; font-size: 15px; font-weight: 500; }
+		.project-type { color: var(--muted); white-space: nowrap; }
+		.project-index { display: block; margin-top: 7px; color: var(--muted); }
+
+		.closing {
+			padding: 54px var(--gutter) 60px;
+			background: var(--ink);
+			color: var(--paper);
+		}
+		.closing-top { display: flex; justify-content: space-between; gap: 24px; align-items: flex-start; }
+		.closing h2 {
+			margin: 35px 0 60px;
+			max-width: 900px;
+			font-size: clamp(48px, 9.5vw, 132px);
+			font-weight: 500;
+			line-height: .85;
+			letter-spacing: 0;
+		}
+		.contact-link { border-bottom: 1px solid #878782; padding-bottom: 6px; font: 11px var(--mono); text-transform: uppercase; }
+		.footer-row {
+			display: flex;
+			justify-content: space-between;
+			gap: 20px;
+			padding-top: 17px;
+			border-top: 1px solid #555550;
+			color: #b7b7b1;
+			font: 10px var(--mono);
+			text-transform: uppercase;
+		}
+		.footer-row a:hover { color: white; }
+		.reveal { animation: rise 700ms both; }
+		@keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+		@keyframes appear { from { opacity: 0; } to { opacity: 1; } }
+
+		@media (max-width: 900px) {
+			.intro { min-height: 450px; grid-template-columns: 1fr 240px; gap: 35px; }
+			.grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 34px 14px; }
+		}
+		@media (max-width: 620px) {
+			.topbar { min-height: 64px; }
+			.topbar nav { gap: 12px; }
+			.availability { display: none; }
+			.topbar nav a { font-size: 9px; }
+			.intro { min-height: auto; padding-top: 64px; padding-bottom: 56px; grid-template-columns: 1fr; gap: 46px; }
+			h1 { font-size: clamp(61px, 17vw, 104px); }
+			.intro-note { margin-top: 27px; }
+			.intro-aside { display: grid; grid-template-columns: 1fr auto; align-items: end; gap: 20px; }
+			.intro-aside p { margin: 0; }
+			.intro-aside .coordinates { margin: 0; text-align: right; white-space: nowrap; }
+			.work { padding-bottom: 76px; }
+			.work-heading { align-items: flex-start; flex-direction: column; }
+			.filters { justify-content: flex-start; margin-left: -10px; }
+			.filter { padding: 8px 10px; }
+			.grid { gap: 28px 11px; padding-top: 15px; }
+			.project-meta { display: block; margin-top: 10px; }
+			.project h3 { font-size: 13px; }
+			.project-type { display: block; margin-top: 5px; font-size: 9px; }
+			.project-index { font-size: 9px; }
+			.closing { padding-top: 42px; }
+			.closing-top { display: block; }
+			.closing h2 { margin: 52px 0 44px; font-size: clamp(50px, 14vw, 82px); }
+			.footer-row { flex-wrap: wrap; font-size: 9px; }
+		}
+		@media (prefers-reduced-motion: reduce) {
+			*, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; }
+		}
+	</style>
+</head>
+<body>
+	<div class="shell">
+		<header class="topbar">
+			<a class="wordmark" href="#top">SJ / Portfolio</a>
+			<nav aria-label="Portfolio categories">
+				<a href="#work" data-category-link="Film">Film</a>
+				<a href="#work" data-category-link="Design">Design</a>
+				<a href="#work" data-category-link="Photography">Photo</a>
+				<a href="#work" data-category-link="Music">Music</a>
+			</nav>
+			<a class="availability" href="mailto:hello@stephenjablonsky.com">Available for select work</a>
+		</header>
+
+		<main id="top">
+			<section class="intro" aria-labelledby="page-title">
+				<div class="reveal">
+					<p class="eyebrow">Independent creative / 2024—26</p>
+					<h1 id="page-title"><span>Stephen</span><span>Jablonsky</span></h1>
+					<p class="intro-note">A practice across moving image, visual form, stills, and sound.</p>
+				</div>
+				<aside class="intro-aside reveal">
+					<div>
+						<span class="section-kicker">About</span>
+						<p>Building considered worlds and visual identities, from the first frame to the final note.</p>
+					</div>
+					<p class="coordinates">Brooklyn, NY<br>40° 41' N / 73° 59' W</p>
+				</aside>
+			</section>
+
+			<section class="work" id="work" aria-labelledby="work-title">
+				<div class="work-heading">
+					<h2 id="work-title">Selected work / 01—08</h2>
+					<div class="filters" role="group" aria-label="Filter projects by category">
+						<button class="filter" type="button" data-filter="All" aria-pressed="true">All</button>
+						<button class="filter" type="button" data-filter="Film" aria-pressed="false">Film</button>
+						<button class="filter" type="button" data-filter="Design" aria-pressed="false">Design</button>
+						<button class="filter" type="button" data-filter="Photography" aria-pressed="false">Photography</button>
+						<button class="filter" type="button" data-filter="Music" aria-pressed="false">Music</button>
+					</div>
+				</div>
+
+				<div class="grid" aria-live="polite">
+					<article class="project" data-category="Film">
+						<div class="image-wrap"><img src="https://images.unsplash.com/photo-1485846234645-a62644f84728?auto=format&amp;fit=crop&amp;w=900&amp;h=900&amp;q=85" alt="Rows of empty cinema seats" loading="lazy"></div>
+						<div class="project-meta"><h3>After the Image</h3><span class="project-type">Film</span></div>
+						<span class="project-index">01 / Short film</span>
+					</article>
+					<article class="project" data-category="Design">
+						<div class="image-wrap"><img src="https://images.unsplash.com/photo-1511818966892-d7d671e672a2?auto=format&amp;fit=crop&amp;w=900&amp;h=900&amp;q=85" alt="Sculptural modern architecture in monochrome" loading="lazy"></div>
+						<div class="project-meta"><h3>Objects in Space</h3><span class="project-type">Design</span></div>
+						<span class="project-index">02 / Identity</span>
+					</article>
+					<article class="project" data-category="Photography">
+						<div class="image-wrap"><img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&amp;fit=crop&amp;w=900&amp;h=900&amp;q=85" alt="Black and white portrait of a man" loading="lazy"></div>
+						<div class="project-meta"><h3>Quiet Hours</h3><span class="project-type">Photography</span></div>
+						<span class="project-index">03 / Portraits</span>
+					</article>
+					<article class="project" data-category="Music">
+						<div class="image-wrap"><img src="https://images.unsplash.com/photo-1516280440614-37939bbacd81?auto=format&amp;fit=crop&amp;w=900&amp;h=900&amp;q=85" alt="Singer performing under a spotlight" loading="lazy"></div>
+						<div class="project-meta"><h3>Live / At the Edge</h3><span class="project-type">Music</span></div>
+						<span class="project-index">04 / Live session</span>
+					</article>
+					<article class="project" data-category="Film">
+						<div class="image-wrap"><img src="https://images.unsplash.com/photo-1478720568477-152d9b164e26?auto=format&amp;fit=crop&amp;w=900&amp;h=900&amp;q=85" alt="Film camera and production set" loading="lazy"></div>
+						<div class="project-meta"><h3>Northbound</h3><span class="project-type">Film</span></div>
+						<span class="project-index">05 / Direction</span>
+					</article>
+					<article class="project" data-category="Design">
+						<div class="image-wrap"><img src="https://images.unsplash.com/photo-1509631179647-0177331693ae?auto=format&amp;fit=crop&amp;w=900&amp;h=900&amp;q=85" alt="Minimal fashion editorial portrait" loading="lazy"></div>
+						<div class="project-meta"><h3>Form / Function</h3><span class="project-type">Design</span></div>
+						<span class="project-index">06 / Art direction</span>
+					</article>
+					<article class="project" data-category="Photography">
+						<div class="image-wrap"><img src="https://images.unsplash.com/photo-1519608487953-e999c86e7455?auto=format&amp;fit=crop&amp;w=900&amp;h=900&amp;q=85" alt="Night sky above a quiet landscape" loading="lazy"></div>
+						<div class="project-meta"><h3>Somewhere, After</h3><span class="project-type">Photography</span></div>
+						<span class="project-index">07 / Landscapes</span>
+					</article>
+					<article class="project" data-category="Music">
+						<div class="image-wrap"><img src="https://images.unsplash.com/photo-1511379938547-c1f69419868d?auto=format&amp;fit=crop&amp;w=900&amp;h=900&amp;q=85" alt="Recording studio mixing desk" loading="lazy"></div>
+						<div class="project-meta"><h3>Room Tone</h3><span class="project-type">Music</span></div>
+						<span class="project-index">08 / Sound</span>
+					</article>
+				</div>
+			</section>
+		</main>
+
+		<footer class="closing" id="contact">
+			<div class="closing-top">
+				<span class="footer-label">Have something in mind?</span>
+				<a class="contact-link" href="mailto:hello@stephenjablonsky.com">Start a conversation ↗</a>
+			</div>
+			<h2>Make it<br>mean something.</h2>
+			<div class="footer-row">
+				<span>Stephen Jablonsky © 2026</span>
+				<a href="#top">Back to top ↑</a>
+				<span>Independent practice / Brooklyn, NY</span>
+			</div>
+		</footer>
+	</div>
+
+	<script>
+		const filterButtons = document.querySelectorAll(".filter");
+		const projects = document.querySelectorAll(".project");
+
+		function setFilter(category) {
+			filterButtons.forEach((button) => {
+				button.setAttribute("aria-pressed", String(button.dataset.filter === category));
+			});
+			projects.forEach((project) => {
+				project.hidden = category !== "All" && project.dataset.category !== category;
+			});
+		}
+
+		filterButtons.forEach((button) => {
+			button.addEventListener("click", () => setFilter(button.dataset.filter));
+		});
+
+		document.querySelectorAll("[data-category-link]").forEach((link) => {
+			link.addEventListener("click", () => setFilter(link.dataset.categoryLink));
+		});
+	</script>
+</body>
+</html>
