@@ -95,6 +95,27 @@
 			line-height: 1.6;
 		}
 		.intro-aside .coordinates { margin-top: 37px; color: var(--muted); font: 10px var(--mono); }
+		.weather {
+			margin-top: 24px;
+			padding: 16px;
+			border: 1px solid var(--ink);
+			min-width: 0;
+		}
+		.weather-header { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+		.weather-refresh {
+			padding: 6px 0 6px 6px;
+			border: 0;
+			background: transparent;
+			font: 10px var(--mono);
+			text-decoration: underline;
+			cursor: pointer;
+		}
+		.weather-refresh:disabled { opacity: .5; cursor: wait; }
+		.intro-aside .weather-status { margin: 12px 0 0; max-width: none; overflow-wrap: anywhere; }
+		.weather-reading { display: flex; align-items: center; gap: 12px; margin-top: 12px; }
+		.weather-reading[hidden] { display: none; }
+		.weather-icon { font-size: 30px; line-height: 1; }
+		.weather-temperature { font: 500 28px var(--sans); }
 
 		.work { padding: 0 var(--gutter) 105px; }
 		.work-heading {
@@ -191,6 +212,7 @@
 			.intro-aside { display: grid; grid-template-columns: 1fr auto; align-items: end; gap: 20px; }
 			.intro-aside p { margin: 0; }
 			.intro-aside .coordinates { margin: 0; text-align: right; white-space: nowrap; }
+			.weather { grid-column: 1 / -1; margin-top: 0; }
 			.work { padding-bottom: 76px; }
 			.work-heading { align-items: flex-start; flex-direction: column; }
 			.filters { justify-content: flex-start; margin-left: -10px; }
@@ -236,6 +258,19 @@
 						<p>Building considered worlds and visual identities, from the first frame to the final note.</p>
 					</div>
 					<p class="coordinates">Brooklyn, NY<br>40° 41' N / 73° 59' W</p>
+					<section class="weather" aria-labelledby="weather-title" aria-busy="true">
+						<div class="weather-header">
+							<span class="section-kicker" id="weather-title">Your local weather</span>
+							<button class="weather-refresh" type="button" disabled>Refresh</button>
+						</div>
+						<div role="status" aria-live="polite" aria-atomic="true">
+							<div class="weather-reading" hidden>
+								<span class="weather-icon" aria-hidden="true"></span>
+								<span class="weather-temperature"></span>
+							</div>
+							<p class="weather-status">Finding your location...</p>
+						</div>
+					</section>
 				</aside>
 			</section>
 
@@ -330,6 +365,78 @@
 		document.querySelectorAll("[data-category-link]").forEach((link) => {
 			link.addEventListener("click", () => setFilter(link.dataset.categoryLink));
 		});
+
+		const weatherWidget = document.querySelector(".weather");
+		const weatherRefresh = document.querySelector(".weather-refresh");
+		const weatherStatus = document.querySelector(".weather-status");
+		const weatherReading = document.querySelector(".weather-reading");
+
+		function weatherCondition(code) {
+			if (code === 0) return ["☀️", "Clear skies"];
+			if (code === 1 || code === 2) return ["🌤️", "Partly cloudy"];
+			if (code === 3) return ["☁️", "Overcast"];
+			if (code === 45 || code === 48) return ["🌫️", "Fog"];
+			if ([51, 53, 55, 56, 57].includes(code)) return ["🌧️", "Drizzle"];
+			if ([61, 63, 65, 66, 67, 80, 81, 82].includes(code)) return ["🌧️", "Rain"];
+			if ([71, 73, 75, 77, 85, 86].includes(code)) return ["❄️", "Snow"];
+			if ([95, 96, 99].includes(code)) return ["⛈️", "Thunderstorm"];
+			return ["🌡️", "Current conditions"];
+		}
+
+		function finishWeather(message) {
+			weatherStatus.textContent = message;
+			weatherWidget.setAttribute("aria-busy", "false");
+			weatherRefresh.disabled = false;
+		}
+
+		function loadWeather() {
+			weatherRefresh.disabled = true;
+			weatherWidget.setAttribute("aria-busy", "true");
+			weatherReading.hidden = true;
+			weatherStatus.textContent = "Finding your location...";
+
+			if (!window.isSecureContext || !navigator.geolocation) {
+				finishWeather("Location requires HTTPS or localhost and a browser with location support.");
+				return;
+			}
+
+			navigator.geolocation.getCurrentPosition(async (position) => {
+				weatherStatus.textContent = "Loading weather...";
+				const controller = new AbortController();
+				const timeout = setTimeout(() => controller.abort(), 10000);
+				try {
+					const url = new URL("https://api.open-meteo.com/v1/forecast");
+					url.search = new URLSearchParams({
+						latitude: position.coords.latitude,
+						longitude: position.coords.longitude,
+						current: "temperature_2m,weather_code",
+						temperature_unit: "fahrenheit"
+					}).toString();
+					const response = await fetch(url, { signal: controller.signal });
+					if (!response.ok) throw new Error("Weather request failed");
+					const data = await response.json();
+					if (!Number.isFinite(data.current?.temperature_2m) || !Number.isInteger(data.current?.weather_code)) {
+						throw new Error("Invalid weather data");
+					}
+					const [icon, description] = weatherCondition(data.current.weather_code);
+					document.querySelector(".weather-icon").textContent = icon;
+					document.querySelector(".weather-temperature").textContent = `${Math.round(data.current.temperature_2m)}°F`;
+					weatherReading.hidden = false;
+					finishWeather(description);
+				} catch {
+					finishWeather("Weather unavailable. Please try again.");
+				} finally {
+					clearTimeout(timeout);
+				}
+			}, (error) => {
+				finishWeather(error.code === 1
+					? "Location access denied. Allow location in your browser settings, then refresh."
+					: "Location unavailable. Please try again.");
+			}, { enableHighAccuracy: false, timeout: 10000, maximumAge: 300000 });
+		}
+
+		weatherRefresh.addEventListener("click", loadWeather);
+		loadWeather();
 	</script>
 </body>
 </html>
